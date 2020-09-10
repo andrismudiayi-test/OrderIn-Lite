@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OrderInLite.Repository;
+using OrderInLite.Service;
+using OrderInLite.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -22,6 +24,9 @@ namespace OrderInLite
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddScoped<IRepositoryService, RepositoryService>();
+            services.AddScoped<IOrderService, OrderService>();
             
             var dbServer = Configuration["DbServerSwitch"];
             

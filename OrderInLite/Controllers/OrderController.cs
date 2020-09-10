@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using OrderInLite.Models.Business;
 using System.Text.Json;
-
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using OrderInLite.Interfaces;
+using OrderInLite.Service;
 
 namespace OrderInLite.Controllers
 {
@@ -15,37 +14,30 @@ namespace OrderInLite.Controllers
     [ApiController]
     [Route("[controller]")]
     public class OrderController : ControllerBase
-    {        
-        [HttpGet]
-        public IEnumerable<FoodSearchResultItem> SearchFood(string searchTerm = "tacos in cape town")
+    {
+        private IOrderService _orderService;
+
+        public OrderController(IOrderService orderService)
         {
-            //todo: sanitize and process search string
-            if (string.IsNullOrWhiteSpace(searchTerm)) return null; 
+            _orderService = orderService;
+        }
 
-            var result =  new List<FoodSearchResultItem>()
-            {
-                new FoodSearchResultItem(){CategoryName = "abc", CityName ="cape town", Price = 120, MenuItemName="classic taco" },
-                new FoodSearchResultItem(){CategoryName = "efj", CityName ="cape town", Price = 120, MenuItemName="classic taco1" },
-                new FoodSearchResultItem(){CategoryName = "xyz", CityName ="cape town", Price = 120, MenuItemName="classic taco2" }
-            };
+        [HttpGet]
+        public async Task<List<FoodSearchResultModel>> SearchFood(string searchPhrase = "tacos in cape town")
+        {
+            if (string.IsNullOrWhiteSpace(searchPhrase)) return null;
 
-            return result;
+            return await _orderService.SearchFoodByCity(searchPhrase);
         }
 
         [HttpPost]
-        public string PlaceOrder([FromBody] OrderPlacement newOrder)
+        public async Task<string> PlaceOrder([FromBody] OrderPlacementModel newOrder)
         {
             if (newOrder == null) return null;
 
+            var confirmedOrder = await _orderService.PlaceOrder(newOrder);
 
-            return "success";
+            return confirmedOrder.OrderId > 0 ? "success" : "fail";
         }
-
-        [HttpPost]
-        public List<string> SearchMenu(string value)
-        {
-            return  null;
-        }
-       
     }
 }

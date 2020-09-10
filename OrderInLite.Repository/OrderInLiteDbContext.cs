@@ -5,9 +5,9 @@ namespace OrderInLite.Repository
 {
     public class OrderInLiteDbContext : DbContext
     {
-        public OrderInLiteDbContext()
+        public OrderInLiteDbContext(DbContextOptions options): base(options)
         {
-            Database.GetDbConnection().ConnectionString = "SqlServerConnection";
+            
         }
 
         public DbSet<Category> Categories { get; set; }
@@ -21,16 +21,12 @@ namespace OrderInLite.Repository
 
         public DbSet<OrderItem> OrderItems { get; set; }
 
-        public DbSet<FoodSearchResult> MenuSearchResults { get; set; }
-        public DbSet<OrderPlacementResult> OrderPlacementResults { get; set; }
+        public DbSet<FoodSearchResult> FoodSearchResults { get; set; }        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<FoodSearchResult>().HasNoKey();
-            modelBuilder.Entity<OrderPlacementResult>().HasNoKey();
+            modelBuilder.Entity<FoodSearchResult>().HasNoKey();            
         }
 
-        
-        
     }
 }

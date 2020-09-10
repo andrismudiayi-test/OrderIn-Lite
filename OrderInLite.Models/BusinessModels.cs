@@ -2,63 +2,41 @@
 using System.ComponentModel;
 
 namespace OrderInLite.Models.Business
-{
-          
-    public enum City
+{   
+    public class SearchModel
     {
-        [Description("Cape Town")]
-        CPT = 1,
-        [Description("Johannesburg")]
-        JHB = 2,
-        [Description("Durban")]
-        DBN = 3
+        public string CityName { get; set; }
+        public string FoodName { get; set; }
     }
 
-    public enum OrderStatus
+    public class MenuItemModel
     {
-        [Description("Done")]
-        DONE = 1,
-        [Description("Pending")]
-        PENDING = 2,
-        [Description("Placed")]
-        PLACED = 3
+        public int MenuItemId { get; set; }
+        public string MenuItemName { get; set; }
+        public double Price { get; set; }
     }
 
-    public class OrderCategory
+    public class FoodSearchResultModel
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-    }
-
-    public class OrderMenuItem
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-    }
-    
-    public class OrderRestaurant
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
+        public string LogoPath { get; set; }
+        public string RestaurantName { get; set; }
         public string Suburb { get; set; }
         public int Rank { get; set; }
-        public string CityName { get; set; }
-        public string LogoPath { get; set; }
-    }
-       
-    public class FoodSearchResultItem
-    {
-        public string MenuItemName { get; set; }
-        public float Price { get; set; }
-        public string CategoryName { get; set; }
-        public string CityName { get; set; }
-        public string Rank { get; set; }
+        public List<MenuItemModel> MenuItems { get; set; }
     }
 
-    public class OrderPlacement
+    public class OrderPlacementModel
     {
-        public int OrderId { get; set; }
+        public int OrderId { get; set; }        
         public int[] MenuItemIds { get; set; }
+        public int CustomerId { get; set; }
     }
+
+    public class OrderConfirmationModel
+    {        
+        public int OrderId { get; set; }
+        public string CustomerName { get; set; }
+    }
+
 
 }

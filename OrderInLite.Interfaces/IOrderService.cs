@@ -8,8 +8,8 @@ namespace OrderInLite.Interfaces
 {
     public interface IOrderService
     {
-        List<FoodSearchResultItem> SearchMenuItems(string SearchTerm, string city);        
-        string PlaceOrder(OrderPlacement order);
+        Task<List<FoodSearchResultModel>> SearchFoodByCity(string searchPhrase);        
+        Task<OrderConfirmationModel> PlaceOrder(OrderPlacementModel order);        
     }
     
 }

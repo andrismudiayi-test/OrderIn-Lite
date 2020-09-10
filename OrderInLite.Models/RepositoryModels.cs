@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace OrderInLite.Models.Repository
 {
@@ -54,11 +55,12 @@ namespace OrderInLite.Models.Repository
         public int Id { get; set; }
         public DateTime OrderTime { get; set; }        
         public int OrderStatusId { get; set; }
-        public int CustomerId { get; set; }
+        public int CustomerId { get; set; }        
     }
 
     public class OrderItem
     {
+        [Key]
         public int FoodOrderId { get; set; }
         public int MenuItemId { get; set; }
 
@@ -73,11 +75,6 @@ namespace OrderInLite.Models.Repository
         public string CategoryName { get; set; }
         public string CityName { get; set; }
         public string Rank { get; set; }
-    }
-
-    public class OrderPlacementResult
-    {
-        public int OrderId { get; set; }
     }
 
 }
