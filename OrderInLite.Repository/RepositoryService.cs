@@ -43,30 +43,43 @@ namespace OrderInLite.Repository
                         .Where(r => r.Restaurant.City.Name == cityName).ToListAsync();
                 }
 
+                var flattenedResult = from r in menuItemsList
+                                      select new Restaurant()
+                                      {
+                                          Id = r.Restaurant.Id,
+                                          Name = r.Restaurant.Name,
+                                          LogoPath = r.Restaurant.LogoPath,
+                                          Suburb = r.Restaurant.Suburb,
+                                          Rank = r.Restaurant.Rank,
+                                          MenuItem = (from m in r.Restaurant.MenuItem
+                                                      select new MenuItem
+                                                      {
+                                                          Id = m.Id,
+                                                          Name = m.Name,
+                                                          Price = m.Price
+                                                      }
 
-                List<FoodSearchResultItem> foodSearchResultList = new List<FoodSearchResultItem>();
+                                                      ).ToList()
+                                      };
 
-                /*foreach(var mi in menuItemsList)
-                {
-                    foodSearchResultList.Add(_mapper.Map<FoodSearchResultItem>(menuItemsList));
-                }*/
+                var foodSearchResultList = from r in flattenedResult
+                                                                         select new FoodSearchResultItem()
+                                                                         {
+                                                                             RestaurantId = r.Id,
+                                                                             LogoPath = r.LogoPath,
+                                                                             RestaurantName = r.Name,
+                                                                             SuburbName = r.Suburb,
+                                                                             RankNumber = r.Rank,
+                                                                             MenuItems = (from m in r.MenuItem
+                                                                                          select new MenuItemModel()
+                                                                                          {
+                                                                                              MenuItemId = m.Id,
+                                                                                              Name = m.Name,
+                                                                                              Price = (double)m.Price
+                                                                                          }).ToList()
 
-                /*foreach(var mi in menuItemsList)
-                {
-                    foodSearchResultList.Add(){
-                        new FoodSearchItem()
-                        {
-                            RestaurantId = mi.RestaurantId,
-                            LogoPath = mi.Restaurant.LogoPath,
-                            RestaurantName = mi.Restaurant.Name,
-                            SuburbName = mi.Restaurant.Suburb,
-                            RankNumber = mi.Restaurant.Rank,
-                            FoodItemResultsList = null
-                        }
-                        
-                    }
-                }*/
 
+                                                                         };
                 #region mock data
 
                 var menuItemsModelMock1 = new List<MenuItemModel>() {
@@ -118,7 +131,7 @@ namespace OrderInLite.Repository
 
                 #endregion
 
-                return foodSearchResultListMock;
+                return foodSearchResultList.Cast<FoodSearchResultItem>().ToList();
 
             }
             catch (Exception ex)
