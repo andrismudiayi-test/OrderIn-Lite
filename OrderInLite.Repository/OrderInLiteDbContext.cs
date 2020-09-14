@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using OrderInLite.Models.Repository;
+
 namespace OrderInLite.Repository
 {
     public class OrderInLiteDbContext : DbContext
@@ -21,12 +22,7 @@ namespace OrderInLite.Repository
 
         public DbSet<OrderItem> OrderItems { get; set; }
 
-        public DbSet<FoodSearchResult> FoodSearchResults { get; set; }        
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<FoodSearchResult>().HasNoKey();            
-        }
+        public DbSet<FoodSearchResult> FoodSearchResults { get; set; }
 
     }
 }

@@ -18,6 +18,13 @@ namespace OrderInLite
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureLogging(logBuilder =>
+                {
+                    logBuilder.ClearProviders(); 
+                    logBuilder.AddConsole();
+                    logBuilder.AddTraceSource("Information, ActivityTracing"); 
+                })
+
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

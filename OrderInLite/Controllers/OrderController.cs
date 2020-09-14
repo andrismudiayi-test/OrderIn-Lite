@@ -12,7 +12,7 @@ namespace OrderInLite.Controllers
 {
 
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class OrderController : ControllerBase
     {
         private IOrderService _orderService;
@@ -22,12 +22,21 @@ namespace OrderInLite.Controllers
             _orderService = orderService;
         }
 
-        [HttpGet]
-        public async Task<List<FoodSearchResultModel>> SearchFood(string searchPhrase = "tacos in cape town")
+        /*[HttpGet]
+        public async Task<List<FoodSearchResultModel>> SearchFood(string searchPhrase)
         {
             if (string.IsNullOrWhiteSpace(searchPhrase)) return null;
 
             return await _orderService.SearchFoodByCity(searchPhrase);
+        }*/
+
+
+        [HttpGet]
+        public async Task<List<MenuItemModel>> SearchFood(string searchPhrase)
+        {
+            if (string.IsNullOrWhiteSpace(searchPhrase)) return null;
+
+            return await _orderService.SearchMenusByCity(searchPhrase);
         }
 
         [HttpPost]

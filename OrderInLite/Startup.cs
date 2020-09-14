@@ -1,3 +1,4 @@
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -7,6 +8,7 @@ using OrderInLite.Repository;
 using OrderInLite.Service;
 using OrderInLite.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Swashbuckle.AspNetCore.Swagger;
 
 
 namespace OrderInLite
@@ -25,8 +27,8 @@ namespace OrderInLite
         {
             services.AddControllers();
 
-            services.AddScoped<IRepositoryService, RepositoryService>();
-            services.AddScoped<IOrderService, OrderService>();
+            services.AddTransient<IRepositoryService, RepositoryService>();
+            services.AddTransient<IOrderService, OrderService>();
             
             var dbServer = Configuration["DbServerSwitch"];
             
@@ -39,7 +41,9 @@ namespace OrderInLite
                 services.AddDbContext<OrderInLiteDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("PostgresServerConnection")));
             }
-            
+
+            services.AddSwaggerGen();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,6 +53,19 @@ namespace OrderInLite
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger(c =>
+            {
+                c.SerializeAsV2 = true;
+            });
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "OrderIn-Lite API V1");
+            });
 
             app.UseHttpsRedirection();
 
