@@ -8,113 +8,129 @@ using OrderInLite.Models.Business;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using System.Linq;
+using AutoMapper;
 
 namespace OrderInLite.Repository
 {
     public class RepositoryService : IRepositoryService
-    {        
+    {
         private readonly DbContextOptions _options;
         private readonly ILogger _logger;
+        private readonly IMapper _mapper;
 
-        public RepositoryService(DbContextOptions options, ILogger<RepositoryService> logger)
+        public RepositoryService(DbContextOptions options, ILogger<RepositoryService> logger, IMapper mapper)
         {
             _options = options;
             _logger = logger;
+            _mapper = mapper;
         }
 
-
-        public async Task<List<FoodSearchResultModel>> SearchFoodByCity(string foodName, string cityName)
+        public async Task<List<FoodSearchResultItem>> SearchFoodByCity(string foodName, string cityName)
         {
             try
             {
-                List<FoodSearchResultModel> foodSearchResults = new List<FoodSearchResultModel>();
-                List<FoodSearchResult> foodSearchResultsList = new List<FoodSearchResult>();
-
-
-                using (var db = new OrderInLiteDbContext(_options))
-                {
-
-                    var queryResult = await (from mi in db.MenuItems
-                                             join ctgy in db.Categories on mi.CategoryId equals ctgy.Id
-                                             join rest in db.Restaurants on mi.Restaurant.Id equals rest.Id
-                                             join ct in db.Cities on rest.CityId equals ct.Id
-                                             where ctgy.Name.Contains(foodName)
-                                             && mi.Name.Contains(foodName)
-                                             && ct.Name == cityName
-                                             select new
-                                             {
-                                                 restaurantId = rest.Id,
-                                                 restaurantName = rest.Name,
-                                                 logoPath = rest.LogoPath,
-                                                 suburbName = rest.Suburb,
-                                                 RankNumber = rest.Rank,
-                                                 menuItemId = mi.Id,                                                 
-                                                 menuItemName = mi.Name,
-                                                 price = mi.Price,
-                                                 categoryName = ctgy.Name,
-                                                 cityName = ct.Name
-                                             }).ToListAsync();
-
-                     foreach (var q in queryResult)
-                     {
-                         foodSearchResults.Add(new FoodSearchResultModel()
-                         {
-                             RestaurantId = q.restaurantId,
-                             RestaurantName = q.restaurantName,
-                             LogoPath = q.logoPath,
-                             SuburbName = q.suburbName,
-                             RankNumber = q.RankNumber,
-                             MenuitemId = q.menuItemId,                
-                             MenuItemName = q.menuItemName,
-                             MenuItemPrice = q.price,
-                             CategoryName = q.categoryName,
-                             CityName = q.cityName
-                         });
-                     }
-                }
-
-                return foodSearchResults;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception();
-                _logger.LogInformation($"error:{ex.Message}");
-            }
-        }
-
-        public async Task<List<MenuItemModel>> SearchMenusByCity(string foodName, string cityName)
-        {
-            try
-            {                
                 List<MenuItem> menuItemsList = new List<MenuItem>();
-                List<MenuItemModel> menuItemsModelList = new List<MenuItemModel>();
+                List<Restaurant> restaurants = new List<Restaurant>();
 
                 using (var db = new OrderInLiteDbContext(_options))
                 {
-                    menuItemsList = await db.MenuItems
+                    menuItemsList = await db.MenuItem
                         .Where(m => m.Name.Contains(foodName))
                         .Include(c => c.Category)
                         .Where(c => c.Category.Name.Contains(foodName))
-                        .Include(r => r.Restaurant)                        
-                        .Where(m => m.Restaurant.City.Id == 1).ToListAsync();
-                }
-                foreach (var mi in menuItemsList)
-                {
-                    menuItemsModelList.Add(new MenuItemModel() { MenuItemId = mi.Id, MenuItemName = mi.Name, Price = mi.Price });
+                        .Include(r => r.Restaurant)
+                        .Include(ct => ct.Restaurant.City)
+                        .Where(r => r.Restaurant.City.Name == cityName).ToListAsync();
                 }
 
-                return menuItemsModelList;
+
+                List<FoodSearchResultItem> foodSearchResultList = new List<FoodSearchResultItem>();
+
+                /*foreach(var mi in menuItemsList)
+                {
+                    foodSearchResultList.Add(_mapper.Map<FoodSearchResultItem>(menuItemsList));
+                }*/
+
+                /*foreach(var mi in menuItemsList)
+                {
+                    foodSearchResultList.Add(){
+                        new FoodSearchItem()
+                        {
+                            RestaurantId = mi.RestaurantId,
+                            LogoPath = mi.Restaurant.LogoPath,
+                            RestaurantName = mi.Restaurant.Name,
+                            SuburbName = mi.Restaurant.Suburb,
+                            RankNumber = mi.Restaurant.Rank,
+                            FoodItemResultsList = null
+                        }
+                        
+                    }
+                }*/
+
+                #region mock data
+
+                var menuItemsModelMock1 = new List<MenuItemModel>() {
+                    new MenuItemModel { MenuItemId = 1, Name = "rice taco", Price = 50.00},
+                    new MenuItemModel { MenuItemId = 2, Name = "patato taco", Price = 45.00},
+                    new MenuItemModel { MenuItemId = 3, Name = "english taco", Price = 65.00}
+                };
+
+                var menuItemsModelMock2 = new List<MenuItemModel>() {
+                    new MenuItemModel { MenuItemId = 1, Name = "rice taco", Price = 50.00},
+                    new MenuItemModel { MenuItemId = 3, Name = "english taco", Price = 65.00}
+                };
+
+                var menuItemsModelMock3 = new List<MenuItemModel>() {
+                    new MenuItemModel { MenuItemId = 1, Name = "ground taco", Price = 50.00},
+                    new MenuItemModel { MenuItemId = 3, Name = "air taco", Price = 65.00}
+                };
+
+                var foodSearchResultListMock = new List<FoodSearchResultItem>()
+                {
+                    new FoodSearchResultItem
+                    {
+                        RestaurantId  = 1,
+                        LogoPath = "",
+                        RestaurantName = "la parada",
+                        SuburbName = "claremont",
+                        RankNumber = 9,
+                        MenuItems  = menuItemsModelMock1
+                    },
+                    new FoodSearchResultItem
+                    {
+                        RestaurantId  = 2,
+                        LogoPath = "",
+                        RestaurantName = "la parada",
+                        SuburbName = "claremont",
+                        RankNumber = 3,
+                        MenuItems  = menuItemsModelMock2
+                    },
+                    new FoodSearchResultItem
+                    {
+                        RestaurantId  = 3,
+                        LogoPath = "",
+                        RestaurantName = "la parada",
+                        SuburbName = "claremont",
+                        RankNumber = 4,
+                        MenuItems  = menuItemsModelMock3
+                    }
+                };
+
+                #endregion
+
+                return foodSearchResultListMock;
 
             }
-            catch(Exception ex) {
+            catch (Exception ex)
+            {
+                _logger.LogError($"error:{ex.Message}");
                 throw new Exception();
-                _logger.LogInformation($"error:{ex.Message}");
             }
         }
 
         public async Task<OrderConfirmationModel> PlaceOrder(int customerId, int[] MenuItemIds)
         {
-            var currentOrder = new FoodOrder{ CustomerId = customerId, OrderStatusId = 1, OrderTime = DateTime.Now };
+            var currentOrder = new FoodOrder { CustomerId = customerId, OrderStatusId = 1, OrderTime = DateTime.Now };
 
             using (var db = new OrderInLiteDbContext(_options))
             {
@@ -122,24 +138,25 @@ namespace OrderInLite.Repository
                 {
                     try
                     {
-                        db.FoodOrders.Add(currentOrder);
+                        db.FoodOrder.Add(currentOrder);
                         db.SaveChanges();
 
                         int currentOrderId = currentOrder.Id;
 
                         foreach (var menuItem in MenuItemIds)
                         {
-                            db.OrderItems.Add(new OrderItem() { FoodOrderId = currentOrderId, MenuItemId = menuItem });
+                            db.OrderItem.Add(new OrderItem() { FoodOrderId = currentOrderId, MenuItemId = menuItem });
                             db.SaveChanges();
                         }
 
                         transc.Commit();
-                        
+
                         return new OrderConfirmationModel() { OrderId = currentOrderId };
                     }
                     catch (Exception ex)
                     {
                         transc.Rollback();
+                        _logger.LogError(ex.Message);
                         throw new Exception(ex.Message);
                     }
                 }
@@ -148,7 +165,7 @@ namespace OrderInLite.Repository
         }
 
         public async Task<List<string>> GetCityNames()
-         {
+        {
             try
             {
                 List<City> citiesList = new List<City>();
@@ -156,10 +173,11 @@ namespace OrderInLite.Repository
 
                 using (var db = new OrderInLiteDbContext(_options))
                 {
-                    citiesList = await db.Cities.ToListAsync();
+                    citiesList = await db.City.ToListAsync();
                 };
-                
-                foreach(var city in citiesList) {
+
+                foreach (var city in citiesList)
+                {
                     cities.Add(city.Name);
                 }
 
@@ -181,11 +199,12 @@ namespace OrderInLite.Repository
                 List<string> menuItems = new List<string>();
 
                 using (var db = new OrderInLiteDbContext(_options))
-                {                 
-                    menuItemsList = await db.MenuItems.ToListAsync();
+                {
+                    menuItemsList = await db.MenuItem.ToListAsync();
                 };
 
-                foreach(var menuItem in menuItemsList) {
+                foreach (var menuItem in menuItemsList)
+                {
                     menuItems.Add(menuItem.Name);
                 }
 
@@ -197,7 +216,6 @@ namespace OrderInLite.Repository
             }
 
         }
-
     }
 }
 

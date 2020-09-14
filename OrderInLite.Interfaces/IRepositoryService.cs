@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 using OrderInLite.Models.Repository;
 
 namespace OrderInLite.Interfaces
-{   
+{
     public interface IRepositoryService
     {
-        Task<List<FoodSearchResultModel>> SearchFoodByCity(string foodName, string cityName);
-        Task<List<MenuItemModel>> SearchMenusByCity(string foodName, string cityName);
+        Task<List<FoodSearchResultItem>> SearchFoodByCity(string foodName, string cityName);
         Task<OrderConfirmationModel> PlaceOrder(int customerId, int[] MenuItemIds);
         Task<List<string>> GetCityNames();
         Task<List<string>> GetFoodNames();

@@ -22,31 +22,22 @@ namespace OrderInLite.Controllers
             _orderService = orderService;
         }
 
-        /*[HttpGet]
-        public async Task<List<FoodSearchResultModel>> SearchFood(string searchPhrase)
+        [HttpGet]
+        public async Task<List<FoodSearchResultItem>> SearchFood(string searchPhrase)
         {
             if (string.IsNullOrWhiteSpace(searchPhrase)) return null;
 
             return await _orderService.SearchFoodByCity(searchPhrase);
-        }*/
-
-
-        [HttpGet]
-        public async Task<List<MenuItemModel>> SearchFood(string searchPhrase)
-        {
-            if (string.IsNullOrWhiteSpace(searchPhrase)) return null;
-
-            return await _orderService.SearchMenusByCity(searchPhrase);
         }
 
         [HttpPost]
-        public async Task<string> PlaceOrder([FromBody] OrderPlacementModel newOrder)
+        public async Task<OrderConfirmationModel> PlaceOrder([FromBody] OrderPlacementModel newOrder)
         {
             if (newOrder == null) return null;
 
             var confirmedOrder = await _orderService.PlaceOrder(newOrder);
 
-            return confirmedOrder.OrderId > 0 ? "success" : "fail";
+            return confirmedOrder.OrderId > 0 ? confirmedOrder : null;
         }
     }
 }
