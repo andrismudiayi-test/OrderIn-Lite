@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderInLite.Interfaces", "O
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderInLite.Api", "OrderInLite\OrderInLite.Api.csproj", "{7055493F-7D89-4B14-8925-D5FCE55CC580}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderInLite.Test", "OrderInLite.Api.Test\OrderInLite.Test.csproj", "{070C6FFE-BB49-43F2-B8ED-1C15F0728444}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,5 +39,9 @@ Global
 		{7055493F-7D89-4B14-8925-D5FCE55CC580}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7055493F-7D89-4B14-8925-D5FCE55CC580}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7055493F-7D89-4B14-8925-D5FCE55CC580}.Release|Any CPU.Build.0 = Release|Any CPU
+		{070C6FFE-BB49-43F2-B8ED-1C15F0728444}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{070C6FFE-BB49-43F2-B8ED-1C15F0728444}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{070C6FFE-BB49-43F2-B8ED-1C15F0728444}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{070C6FFE-BB49-43F2-B8ED-1C15F0728444}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

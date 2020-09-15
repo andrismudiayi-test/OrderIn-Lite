@@ -1,3 +1,7 @@
+/* Data Inserts */
+
+USE ORDERINLITE
+
 /* City: Id, Name */
 
 SET IDENTITY_INSERT City ON

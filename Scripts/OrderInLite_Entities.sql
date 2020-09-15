@@ -1,3 +1,10 @@
+/* Create Entities  */
+
+USE ORDERINLITE
+
+IF OBJECT_ID('Category') IS NOT NULL
+DROP TABLE DBO.Category
+GO
 CREATE TABLE Category 
   ( 
      Id   INT IDENTITY(1, 1) NOT NULL PRIMARY KEY, 
@@ -6,6 +13,9 @@ CREATE TABLE Category
 
 GO
 
+IF OBJECT_ID('City') IS NOT NULL
+DROP TABLE DBO.City
+GO
 CREATE TABLE City 
   ( 
      Id   INT IDENTITY(1, 1) NOT NULL PRIMARY KEY, 
@@ -14,6 +24,9 @@ CREATE TABLE City
 
 GO
 
+IF OBJECT_ID('Restaurant') IS NOT NULL
+DROP TABLE DBO.Restaurant
+GO
 CREATE TABLE Restaurant 
   ( 
      Id       INT IDENTITY(1, 1) NOT NULL PRIMARY KEY, 
@@ -26,6 +39,9 @@ CREATE TABLE Restaurant
 
 GO 
 
+IF OBJECT_ID('MenuItem') IS NOT NULL
+DROP TABLE DBO.MenuItem
+GO
 CREATE TABLE MenuItem 
   ( 
      Id           INT IDENTITY(1, 1) NOT NULL PRIMARY KEY, 
@@ -41,6 +57,9 @@ GO
 
 /*  orders */
 
+IF OBJECT_ID('OrderStatus') IS NOT NULL
+DROP TABLE DBO.OrderStatus
+GO
 CREATE TABLE OrderStatus
   ( 
      Id   INT IDENTITY(1, 1) NOT NULL PRIMARY KEY, 
@@ -48,6 +67,9 @@ CREATE TABLE OrderStatus
   ) 
 GO 
 
+IF OBJECT_ID('Customer') IS NOT NULL
+DROP TABLE DBO.Customer
+GO
 CREATE TABLE Customer
   ( 
      Id   INT IDENTITY(1, 1) NOT NULL PRIMARY KEY, 
@@ -56,7 +78,9 @@ CREATE TABLE Customer
   ) 
 GO 
 
-
+IF OBJECT_ID('FoodOrder') IS NOT NULL
+DROP TABLE DBO.FoodOrder
+GO
 CREATE TABLE FoodOrder 
   ( 
      Id           INT IDENTITY(1, 1) NOT NULL PRIMARY KEY, 
@@ -67,7 +91,9 @@ CREATE TABLE FoodOrder
 
 GO 
 
-
+IF OBJECT_ID('OrderItem') IS NOT NULL
+DROP TABLE DBO.OrderItem
+GO
 CREATE TABLE OrderItem 
   ( 
      FoodOrderId  INT FOREIGN KEY REFERENCES FoodOrder(Id), 

@@ -57,29 +57,25 @@ namespace OrderInLite.Repository
                                                           Id = m.Id,
                                                           Name = m.Name,
                                                           Price = m.Price
-                                                      }
-
-                                                      ).ToList()
+                                                      }).ToList()
                                       };
 
                 var foodSearchResultList = from r in flattenedResult
-                                                                         select new FoodSearchResultItem()
-                                                                         {
-                                                                             RestaurantId = r.Id,
-                                                                             LogoPath = r.LogoPath,
-                                                                             RestaurantName = r.Name,
-                                                                             SuburbName = r.Suburb,
-                                                                             RankNumber = r.Rank,
-                                                                             MenuItems = (from m in r.MenuItem
-                                                                                          select new MenuItemModel()
-                                                                                          {
-                                                                                              MenuItemId = m.Id,
-                                                                                              Name = m.Name,
-                                                                                              Price = (double)m.Price
-                                                                                          }).ToList()
-
-
-                                                                         };
+                                           select new FoodSearchResultItem()
+                                           {
+                                               RestaurantId = r.Id,
+                                               LogoPath = r.LogoPath,
+                                               RestaurantName = r.Name,
+                                               SuburbName = r.Suburb,
+                                               RankNumber = r.Rank,
+                                               MenuItems = (from m in r.MenuItem
+                                                            select new MenuItemModel()
+                                                            {
+                                                                MenuItemId = m.Id,
+                                                                Name = m.Name,
+                                                                Price = (double)m.Price
+                                                            }).ToList()
+                                           };
                 #region mock data
 
                 var menuItemsModelMock1 = new List<MenuItemModel>() {
@@ -131,7 +127,7 @@ namespace OrderInLite.Repository
 
                 #endregion
 
-                return foodSearchResultList.Cast<FoodSearchResultItem>().ToList();
+                return foodSearchResultList.Any() ? foodSearchResultList.Cast<FoodSearchResultItem>().ToList() : null; ;
 
             }
             catch (Exception ex)
