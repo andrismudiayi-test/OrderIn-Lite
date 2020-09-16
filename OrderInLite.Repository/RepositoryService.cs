@@ -40,7 +40,9 @@ namespace OrderInLite.Repository
                         .Where(c => c.Category.Name.Contains(foodName))
                         .Include(r => r.Restaurant)
                         .Include(ct => ct.Restaurant.City)
-                        .Where(r => r.Restaurant.City.Name == cityName).ToListAsync();
+                        .Distinct()
+                        .Where(r => r.Restaurant.City.Name == cityName)                        
+                        .ToListAsync();
                 }
 
                 var flattenedResult = from r in menuItemsList
@@ -76,59 +78,10 @@ namespace OrderInLite.Repository
                                                                 Price = (double)m.Price
                                                             }).ToList()
                                            };
-                #region mock data
 
-                var menuItemsModelMock1 = new List<MenuItemModel>() {
-                    new MenuItemModel { MenuItemId = 1, Name = "rice taco", Price = 50.00},
-                    new MenuItemModel { MenuItemId = 2, Name = "patato taco", Price = 45.00},
-                    new MenuItemModel { MenuItemId = 3, Name = "english taco", Price = 65.00}
-                };
-
-                var menuItemsModelMock2 = new List<MenuItemModel>() {
-                    new MenuItemModel { MenuItemId = 1, Name = "rice taco", Price = 50.00},
-                    new MenuItemModel { MenuItemId = 3, Name = "english taco", Price = 65.00}
-                };
-
-                var menuItemsModelMock3 = new List<MenuItemModel>() {
-                    new MenuItemModel { MenuItemId = 1, Name = "ground taco", Price = 50.00},
-                    new MenuItemModel { MenuItemId = 3, Name = "air taco", Price = 65.00}
-                };
-
-                var foodSearchResultListMock = new List<FoodSearchResultItem>()
-                {
-                    new FoodSearchResultItem
-                    {
-                        RestaurantId  = 1,
-                        LogoPath = "",
-                        RestaurantName = "la parada",
-                        SuburbName = "claremont",
-                        RankNumber = 9,
-                        MenuItems  = menuItemsModelMock1
-                    },
-                    new FoodSearchResultItem
-                    {
-                        RestaurantId  = 2,
-                        LogoPath = "",
-                        RestaurantName = "la parada",
-                        SuburbName = "claremont",
-                        RankNumber = 3,
-                        MenuItems  = menuItemsModelMock2
-                    },
-                    new FoodSearchResultItem
-                    {
-                        RestaurantId  = 3,
-                        LogoPath = "",
-                        RestaurantName = "la parada",
-                        SuburbName = "claremont",
-                        RankNumber = 4,
-                        MenuItems  = menuItemsModelMock3
-                    }
-                };
-
-                #endregion
-
-                return foodSearchResultList.Any() ? foodSearchResultList.Cast<FoodSearchResultItem>().ToList() : null; ;
-
+                return foodSearchResultList.Any() ? foodSearchResultList.Cast<FoodSearchResultItem>()
+                    .OrderByDescending(r => r.RankNumber)
+                    .ToList() : null;
             }
             catch (Exception ex)
             {
@@ -148,14 +101,14 @@ namespace OrderInLite.Repository
                     try
                     {
                         db.FoodOrder.Add(currentOrder);
-                        db.SaveChanges();
+                        await db.SaveChangesAsync();
 
                         int currentOrderId = currentOrder.Id;
 
                         foreach (var menuItem in MenuItemIds)
                         {
                             db.OrderItem.Add(new OrderItem() { FoodOrderId = currentOrderId, MenuItemId = menuItem });
-                            db.SaveChanges();
+                            await db.SaveChangesAsync();
                         }
 
                         transc.Commit();

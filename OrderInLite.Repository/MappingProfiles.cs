@@ -10,6 +10,7 @@ namespace OrderInLite.Repository
     {
         public  MenuItemProfile()
         {
+            //todo: redo
             CreateMap<FoodSearchResultItem, MenuItem>()
                 .ForMember(dest => dest.RestaurantId, opt => opt.MapFrom(src => src.RestaurantId))
                 .ForMember(dest => dest.Restaurant.LogoPath, opt => opt.MapFrom(src => src.LogoPath))

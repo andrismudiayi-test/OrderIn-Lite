@@ -3,19 +3,28 @@ using System.Collections.Generic;
 using OrderInLite.Models.Business;
 using OrderInLite.Models.Repository;
 using OrderInLite.Interfaces;
+using OrderInLite.Repository;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Moq;
-
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace OrderInLite.Test
 {
     public abstract class BaseOrderTests
     {
-        protected readonly SearchModel SearchModel;
-        protected readonly Mock<IOrderService> MockService;
-        protected readonly Mock<IRepositoryService> MockRepo;
+        protected readonly Mock<IOrderService> _mockService;
+        protected readonly Mock<IRepositoryService> _mockRepo;
+        protected readonly Mock<ILogger> _logger;
+        protected readonly Mock<IMapper> _mapper;
+        protected readonly Mock<DbContextOptions> _dbOptions;
+        protected readonly Mock<OrderInLiteDbContext> _context;
 
         #region mock data
+
+        protected readonly SearchModel ValidSearchModel;
+        protected readonly SearchModel InvalidSearchModel;
 
         protected List<MenuItemModel> MenuItemsMock1 = new List<MenuItemModel>() {
                 new MenuItemModel{MenuItemId=1, Name="foo1", Price = 50.00},
@@ -38,10 +47,16 @@ namespace OrderInLite.Test
 
         #endregion
 
+
+
         public BaseOrderTests()
         {
-            MockService = new Mock<IOrderService>();
-            MockRepo = new Mock<IRepositoryService>();
+            _logger = new Mock<ILogger>();
+            _mapper = new Mock<IMapper>();
+            _mockService = new Mock<IOrderService>();
+            _mockRepo = new Mock<IRepositoryService>(_dbOptions, _logger, _mapper);
+            ValidSearchModel = new SearchModel() { FoodName = "Taco", CityName = "Cape Town"};
+            InvalidSearchModel = null;
 
             FoodSearchResultMock = new List<FoodSearchResultItem>() {
                 new FoodSearchResultItem{RestaurantId = 1,
@@ -55,12 +70,6 @@ namespace OrderInLite.Test
             };
 
         }
-
-
-        public abstract Task GivenSearchPhrase_ShouldReturnResult();
-        public abstract Task GivenEmptySearchPhrase_ShouldReturnNull();
-        public abstract Task GivenMenuIds_ShouldConfirmOrder();
-        public abstract Task GivenNoMenuIds_ShouldReturnNull();
-
+        
     }
 }

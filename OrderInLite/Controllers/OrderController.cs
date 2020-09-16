@@ -7,6 +7,7 @@ using OrderInLite.Models.Business;
 using System.Text.Json;
 using OrderInLite.Interfaces;
 using OrderInLite.Service;
+using Microsoft.AspNetCore.Http;
 
 namespace OrderInLite.Controllers
 {
@@ -23,21 +24,29 @@ namespace OrderInLite.Controllers
         }
 
         [HttpGet]
-        public async Task<List<FoodSearchResultItem>> SearchFood(string searchPhrase)
+        public async Task<IActionResult> SearchFood(string searchPhrase)
         {
-            if (string.IsNullOrWhiteSpace(searchPhrase)) return null;
+            if (string.IsNullOrWhiteSpace(searchPhrase)) return NotFound();
 
-            return await _orderService.SearchFoodByCity(searchPhrase);
+            var result =  await _orderService.SearchFoodByCity(searchPhrase);
+            return Ok(result);
         }
 
         [HttpPost]
-        public async Task<OrderConfirmationModel> PlaceOrder([FromBody] OrderPlacementModel newOrder)
+        public async Task<IActionResult> PlaceOrder([FromBody] OrderPlacementModel newOrder)
         {
-            if (newOrder == null) return null;
+             if (! await IsValidOrder(newOrder)) return BadRequest();
 
             var confirmedOrder = await _orderService.PlaceOrder(newOrder);
 
-            return confirmedOrder.OrderId > 0 ? confirmedOrder : null;
+            if (confirmedOrder.OrderId == 0) return StatusCode(500);
+
+            return Ok(confirmedOrder);
+        }
+
+        private async Task<bool> IsValidOrder(OrderPlacementModel newOrder)
+        {
+            return newOrder != null && newOrder.CustomerId > 0 && newOrder.MenuItemIds.Any();
         }
     }
 }

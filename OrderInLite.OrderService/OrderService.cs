@@ -12,6 +12,11 @@ namespace OrderInLite.Service
     {
         private IRepositoryService _repository { get; set; }
 
+        public OrderService()
+        {
+            
+        }
+
         public OrderService(IRepositoryService repository)
         {
             _repository = repository;
@@ -28,9 +33,9 @@ namespace OrderInLite.Service
         }
 
         public async Task<OrderConfirmationModel> PlaceOrder(OrderPlacementModel newOrder)
-        {
+        {           
             var confirmedOrder = await _repository.PlaceOrder(1, newOrder.MenuItemIds);
-
+            
             return new OrderConfirmationModel { OrderId = confirmedOrder.OrderId };
         }
 

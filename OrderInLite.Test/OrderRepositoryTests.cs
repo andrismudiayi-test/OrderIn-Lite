@@ -18,48 +18,39 @@ namespace OrderInLite.Test
         }
 
         [Fact]
-        public override async Task GivenSearchPhrase_ShouldReturnResult()
+        public async Task GivenValidSearch_ShouldReturnResult()
         {
-
+            throw new NotImplementedException();
         }
 
         [Fact]
-        public override async Task GivenEmptySearchPhrase_ShouldReturnNull()
+        public async Task GivenInvalidSearch_ShouldReturnNull()
         {
-            List<FoodSearchResultItem> foodSearchNullResultMock = null;
-
-            base.MockRepo.Setup(repo => repo.SearchFoodByCity(string.Empty))
-            .ReturnsAsync(foodSearchNullResultMock);
-
-            var repo = new RepositoryService (base.MockRepo.Object);
-
-            var result = await repo.SearchFoodByCity(string.Empty);
-            Assert.Null(result);
-
+            throw new NotImplementedException();
         }
 
         [Fact]
-        public override async Task GivenMenuIds_ShouldConfirmOrder()
+        public async Task GivenMenuIds_ShouldConfirmOrder()
         {
-
+            throw new NotImplementedException();
         }
 
         [Fact]
-        public override async Task GivenNoMenuIds_ShouldReturnNull()
+        public async Task GivenNoMenuIds_ShouldReturnNull()
         {
-
+            throw new NotImplementedException();
         }
 
         [Fact]
-        public override async Task ShouldReturnListOfCityNames()
+        public  async Task ShouldReturnListOfCityNames()
         {
-
+            throw new NotImplementedException();
         }
 
         [Fact]
-        public override async Task ShouldReturnListOfFoodsNames()
+        public  async Task ShouldReturnListOfFoodsNames()
         {
-
+            throw new NotImplementedException();
         }
 
     }

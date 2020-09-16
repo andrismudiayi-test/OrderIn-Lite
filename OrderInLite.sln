@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderInLite.Interfaces", "O
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderInLite.Api", "OrderInLite\OrderInLite.Api.csproj", "{7055493F-7D89-4B14-8925-D5FCE55CC580}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderInLite.Test", "OrderInLite.Api.Test\OrderInLite.Test.csproj", "{070C6FFE-BB49-43F2-B8ED-1C15F0728444}"
+Project("{9344BDBB-3E7F-41FC-A0DD-8665D75EE146}") = "OrderInLite.Test", "OrderInLite.Test\OrderInLite.Test.csproj", "{4972F62A-369C-4636-90BB-6A2F7D5D66D8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,9 +39,9 @@ Global
 		{7055493F-7D89-4B14-8925-D5FCE55CC580}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7055493F-7D89-4B14-8925-D5FCE55CC580}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7055493F-7D89-4B14-8925-D5FCE55CC580}.Release|Any CPU.Build.0 = Release|Any CPU
-		{070C6FFE-BB49-43F2-B8ED-1C15F0728444}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{070C6FFE-BB49-43F2-B8ED-1C15F0728444}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{070C6FFE-BB49-43F2-B8ED-1C15F0728444}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{070C6FFE-BB49-43F2-B8ED-1C15F0728444}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4972F62A-369C-4636-90BB-6A2F7D5D66D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4972F62A-369C-4636-90BB-6A2F7D5D66D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4972F62A-369C-4636-90BB-6A2F7D5D66D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4972F62A-369C-4636-90BB-6A2F7D5D66D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
