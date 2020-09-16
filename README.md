@@ -9,7 +9,6 @@ Scripts/SetupDatabase.bat
 Scripts/TestCoverage.bat
 
 ## API
-Docker compose up
 
 https://localhost:5001/swagger/index.html
 
